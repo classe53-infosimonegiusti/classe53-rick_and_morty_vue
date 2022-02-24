@@ -1,14 +1,21 @@
 <template>
     <div class="container">
-        <div class="row">
+
+        <RicercaPersonaggio @eventoRicerca='effettuaRicerca' />
+
+        <div class="row row-cols-4">
+        
             <CardPersonaggio 
-                v-for="personaggio in listaPersonaggi" 
-                :key="personaggio.id" 
-                :pippo="personaggio" 
+                v-for="personaggio in listaPersonaggiFiltrati" 
+                :key="personaggio.id"
+                :personaggio="personaggio" 
             />
+            
         </div>
 
-        <ConteggioPersonaggi :conteggio="listaPersonaggi.length" />
+        <ConteggioPersonaggi :conteggio="listaPersonaggiFiltrati.length" />
+
+        <LoadInProgress v-if="loadingInProgress" />
 
     </div>
 
@@ -21,6 +28,8 @@
 
     import CardPersonaggio from './partials/CardPersonaggio.vue';
     import ConteggioPersonaggi from './partials/ConteggioPersonaggi.vue';
+    import RicercaPersonaggio from './partials/RicercaPersonaggio.vue';
+    import LoadInProgress from './LoadInProgress.vue';
 
     export default {
         name: "ListaPersonaggi",
@@ -28,14 +37,35 @@
             return {
                 listaPersonaggi: [],
                 loadingInProgress: true,
-                endpoint: 'https://api.sampleapis.com/rickandmorty/characters'
+                endpoint: 'https://api.sampleapis.com/rickandmorty/characters',
+                testoRicercato: ''
             }
         },
         components: {
             CardPersonaggio,
-            ConteggioPersonaggi
+            ConteggioPersonaggi,
+            RicercaPersonaggio,
+            LoadInProgress
         },
+
+        computed: {
+            listaPersonaggiFiltrati() {
+                if (this.testoRicercato == "") {
+                    return this.listaPersonaggi;
+                } else {
+                    return this.listaPersonaggi.filter(item => {
+                        return item.name.toLowerCase().replaceAll(' ', '').includes(this.testoRicercato.toLowerCase().replaceAll(' ', ''));
+                    });
+                }
+            }
+        },
+
         methods: {
+
+            effettuaRicerca(testo) {
+                this.testoRicercato = testo;
+            },
+
             getPersonaggi() {
                 // Make a request for a user with a given ID
                 axios.get(this.endpoint)
@@ -48,6 +78,7 @@
                     console.log(error);
                 });
             }
+
         },
         mounted() {
             

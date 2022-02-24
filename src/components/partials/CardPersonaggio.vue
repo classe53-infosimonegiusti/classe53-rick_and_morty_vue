@@ -1,9 +1,9 @@
 <template>
-    <div class="col" >
-        <img :src="pippo.image">
-        <h2>{{pippo.name}}</h2>
-        <div>{{pippo.origin}}</div>
-        <div>{{pippo.gender}}</div>
+    <div class="p-3 text-center">
+        <img class="rounded-circle " :src="personaggio.image">
+        <h2>{{personaggio.name}}</h2>
+        <div>{{personaggio.origin}}</div>
+        <div>{{personaggio.gender}}</div>
     </div>
 </template>
 
@@ -11,7 +11,7 @@
 export default {
     name: 'CardPersonaggio',
     props: {
-        "pippo": Object
+        "personaggio": Object
     }
 }
 </script>

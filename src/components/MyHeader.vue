@@ -1,5 +1,5 @@
 <template>
-  <h1>{{messaggio}}</h1>
+  <h1 class="text-center my-5">{{messaggio}}</h1>
 </template>
 
 <script>
